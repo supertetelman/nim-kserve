@@ -17,9 +17,6 @@ spec:
   imagePullSecrets:
     - name: ngc-secret
   containers:
-    - name: init-container
-      image: busybox
-      command: ["ln", "-s", "/mnt/model-store/*", "/model-store/"]
     - name: kserve-container
       image: nvcr.io/ohlfw0olaadg/ea-participants/nim_llm:24.02
       ports:
@@ -28,7 +25,7 @@ spec:
       command: ["/bin/sh", "-c"]
       args:
         - |
-          ln -s /mnt/model-store/* /model-store/; \
+          ln -s /mnt/models/* /model-store/; \
           nemollm_inference_ms \
             --num_gpus=1 \
             --model={{.Name}} \

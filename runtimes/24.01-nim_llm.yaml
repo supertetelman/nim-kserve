@@ -22,10 +22,10 @@ spec:
       ports:
         - containerPort: 8080
           protocol: TCP
-     command: ["/bin/sh", "-c"]
-     args:
+      command: ["/bin/sh", "-c"]
+      args:
         - |
-          ln -s /mnt/model-store/* /model-store/; \
+          ln -s /mnt/models/* /model-store/; \
           nemollm_inference_ms \
             --num_gpus=1 \
             --model={{.Name}} \
