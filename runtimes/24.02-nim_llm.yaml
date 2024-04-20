@@ -25,12 +25,15 @@ spec:
       ports:
         - containerPort: 8080
           protocol: TCP
+      command: ["/bin/sh", "-c"]
       args:
-        - nemollm_inference_ms
-        - --num_gpus=1
-        - --model={{.Name}}
-        - --openai_port=8080
-        - --health_port=8088
+        - |
+          ln -s /mnt/model-store/* /model-store/; \
+          nemollm_inference_ms \
+            --num_gpus=1 \
+            --model={{.Name}} \
+            --openai_port=8080 \
+            --health_port=8088
       # INFO: : Resources and GPU Quantity defaults should be overriden on a per-model basis
       resources: 
         requests:
