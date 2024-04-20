@@ -1,0 +1,29 @@
+# There are 3 things in thie file that may need updating from the user, all based off the information in the NGC model tag
+# This model comes from https://registry.ngc.nvidia.com/orgs/ohlfw0olaadg/teams/ea-participants/models/llama-2-7b with latest tag 'LLAMA-2-7B-4K-FP16-1-A100.24.01'
+# Based on this tag, the model requires 1-A100 gpu and the NIM runtime version is 24.01, these values must be set below if a different model version was downloaded.
+apiVersion: serving.kserve.io/v1beta1
+kind: InferenceService
+metadata:
+  # TODO: Validate name is being passed properly to the NIM runtime startup command
+  name: llama2-7b-chat
+  annotations:
+    autoscaling.knative.dev/target: "10" # Enable auto-scaling, set max queue size to 10 per NIM Pod
+spec:
+  predictor:
+    minReplicas: 0 # Enable scale-to-zero
+    # INFO: Use the right nodeSelector for the GPU label available in your cluster, check this with 'kubectl describe nodes'
+    nodeSelector:
+      # k8s.amazonaws.com/accelerator: "nvidia-tesla-t4"
+      nvidia.com/gpu.product: A100-SXM4-80GB
+    model:
+      modelFormat:
+        name: nvidia-nim-llm 
+      # INFO: Update the 'nim-pvc' value to the name of the PVC created
+      storageUri: "pvc://nim-pvc/model-store"
+      # INFO: at authorship the latest NIM llama2-7b-chat model was built for 24.01, update this based of the tag of the model downloaded from NGC
+      runtime: nvidia-nim-llm:24.01
+      resources:
+        limits:
+          nvidia.com/gpu: 1
+        requests:
+          nvidia.com/gpu: 1

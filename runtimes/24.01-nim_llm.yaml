@@ -1,0 +1,40 @@
+apiVersion: serving.kserve.io/v1alpha1
+kind: ServingRuntime
+metadata:
+  name: nvidia-nim-llm
+spec:
+  annotations:
+    prometheus.kserve.io/port: '9090'
+    prometheus.kserve.io/path: "/metrics"
+  supportedModelFormats:
+    - name: nvidia-nim-llm
+      version: "24.01"
+      autoSelect: true
+      priority: 1
+  protocolVersions:
+    - v2
+    - grpc-v2
+  imagePullSecrets:
+    - name: ngc-secret
+  containers:
+    - name: kserve-container
+      image: nvcr.io/ohlfw0olaadg/ea-participants/nemollm-inference-ms:24.01
+      ports:
+        - containerPort: 8080
+          protocol: TCP
+      args:
+        - nemollm_inference_ms
+        - --num_gpus=1
+        - --model={{.Name}}
+        - --openai_port=8080
+        - --health_port=9090
+      # INFO: : Resources and GPU Quantity defaults should be overriden on a per-model basis
+      resources: 
+        requests:
+          nvidia.com/gpu: 1
+          cpu: "12"
+          memory: 128Gi
+        limits:
+          nvidia.com/gpu: 1
+          cpu: "12"
+          memory: 256Gi
