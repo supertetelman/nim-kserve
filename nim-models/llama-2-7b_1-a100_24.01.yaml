@@ -21,7 +21,7 @@ spec:
       # INFO: Update the 'nim-pvc' value to the name of the PVC created
       storageUri: "pvc://nim-pvc/model-store"
       # INFO: at authorship the latest NIM llama2-7b-chat model was built for 24.01, update this based of the tag of the model downloaded from NGC
-      runtime: nvidia-nim-llm:24.01
+      runtime: nvidia-nim-llm-24.01
       resources:
         limits:
           nvidia.com/gpu: 1
