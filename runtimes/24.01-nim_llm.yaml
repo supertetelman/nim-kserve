@@ -41,3 +41,11 @@ spec:
           nvidia.com/gpu: 1
           cpu: "12"
           memory: 256Gi
+      volumeMounts:
+        - name: dshm
+          mountPath: /dev/shm
+  volumes:
+    - name: dshm
+      emptyDir:
+        medium: Memory
+        sizeLimit: "128Gi" # 128Gi is overkill, having a large max value will present bottleneck issues
