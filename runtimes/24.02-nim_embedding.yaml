@@ -1,0 +1,48 @@
+kind: ServingRuntime
+metadata:
+  name: nvidia-nim-embedding-24.02
+spec:
+  annotations:
+    prometheus.kserve.io/port: '9090'
+    prometheus.kserve.io/path: "/metrics"
+  supportedModelFormats:
+    - name: nvidia-nim-embedding
+      version: "24.02"
+      autoSelect: true
+      priority: 1
+  protocolVersions:
+    - v2
+    - grpc-v2
+  imagePullSecrets:
+    - name: ngc-secret
+  containers:
+    - name: kserve-container
+      image: nvcr.io/ohlfw0olaadg/ea-participants/nemo-retriever-embedding-microservice:24.02
+      ports:
+        - containerPort: 8080
+          protocol: TCP
+      command: ["/bin/sh", "-c"]
+      args:
+        - |
+          ln -s /mnt/models/* /model-store/; \
+          /scripts/entrypoint.sh
+      securityContext:
+        runAsUser: 0
+      # INFO: : Resources and GPU Quantity defaults should be overriden on a per-model basis
+      resources: 
+        requests:
+          nvidia.com/gpu: 1
+          cpu: "12"
+          memory: 128Gi
+        limits:
+          nvidia.com/gpu: 1
+          cpu: "12"
+          memory: 256Gi
+      volumeMounts:
+        - name: dshm
+          mountPath: /dev/shm
+  volumes:
+    - name: dshm
+      emptyDir:
+        medium: Memory
+        sizeLimit: "128Gi" # 128Gi is overkill, having a large max value will present bottleneck issues
