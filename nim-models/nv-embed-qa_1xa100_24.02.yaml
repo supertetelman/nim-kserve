@@ -16,12 +16,13 @@ spec:
     # INFO: Use the right nodeSelector for the GPU label available in your cluster, check this with 'kubectl describe nodes'
     nodeSelector:
       # k8s.amazonaws.com/accelerator: "nvidia-tesla-a100"
+      # nvidia.com/gpu.product: NVIDIA-A100-SXM4-40GB
       nvidia.com/gpu.product: A100-SXM4-80GB
     model:
       modelFormat:
         name: nvidia-nim-embedding 
       # INFO: Update the 'nim-pvc' value to the name of the PVC created
-      storageUri: "pvc://nim-pvc/model-store/nv-embed-qa_v4"
+      storageUri: "pvc://nim-pvc/model-store" # Files stored in a nv-embed-qa_v4 subdirectory, but NGC container does not properly format into a top-level directory
       runtime: nvidia-nim-embedding-24.02
       resources:
         limits:
