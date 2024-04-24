@@ -16,14 +16,19 @@ export NGC_API_KEY=
 bash scripts/create-secret.sh
 ```
 
-3. Create all the NIM runtimes in the K8s cluster. Note these will not be used until an InferenceService is created in a later step.
+3. Enable the `NodeSelector` feature of KServe to allow a NIM to request different GPU types.
+```
+kubectl patch configmap config-features -n knative-serving --type merge -p '{"data":{"kubernetes.podspec-nodeselector":"enabled"}}'
+```
+
+4. Create all the NIM runtimes in the K8s cluster. Note these will not be used until an InferenceService is created in a later step.
 ```
 for runtime in `ls -d runtimes/*`; do
   kubectl create -f $runtime
 done
 ```
 
-4. Create a PVC called `nim-pvc` in the cluster and download the models into it.
+5. Create a PVC called `nim-pvc` in the cluster and download the models into it.
 TODO: Add details NGC download steps here, CLI setup steps, and example pv yaml files
 TODO: Add notes about managing multiple different models in the same model-store pvc
 
@@ -33,10 +38,10 @@ ngc registry model download-version --dest "/mnt/model-store" "ohlfw0olaadg/ea-p
 # TODO: Add steps to unpack the tarball and ensure it is in the proper folder director of pvc://nim-pvc/model-store
 ```
 
-5. Create a NIM by instationating the InferenceService corresponding to the NIM model you want to run. Note that the NIMs are a thruple of (model, version, gpu type+quantity), be sure to select the right yaml file.
+6. Create a NIM by instationating the InferenceService corresponding to the NIM model you want to run. Note that the NIMs are a thruple of (model, version, gpu type+quantity), be sure to select the right yaml file.
 TODO: Add additional details here 
 
-6. Validate that the NIM is running by posting a query against the KServe endpoint
+7. Validate that the NIM is running by posting a query against the KServe endpoint
 TODO: Add steps on getting the endpoint
 
 ```
