@@ -25,7 +25,7 @@ spec:
       args:
         - |
           ln -s /mnt/models/* /model-store/; \
-          /scripts/entrypoint.sh
+          /app/bin/web -m /model-store -p "8080" -n "1"
       # INFO: : Resources and GPU Quantity defaults should be overriden on a per-model basis
       resources: 
         requests:
