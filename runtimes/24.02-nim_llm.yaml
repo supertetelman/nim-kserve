@@ -28,7 +28,7 @@ spec:
           ln -s /mnt/models/* /model-store/; \
           nemollm_inference_ms \
             --num_gpus=1 \
-            --model={{.Name}} \
+            --model={{.Annotations.nim_model_name}} \
             --openai_port=8080 \
             --health_port=8088
       # INFO: : Resources and GPU Quantity defaults should be overriden on a per-model basis
