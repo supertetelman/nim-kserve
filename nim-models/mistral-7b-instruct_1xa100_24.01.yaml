@@ -2,16 +2,17 @@ apiVersion: serving.kserve.io/v1beta1
 kind: InferenceService
 metadata:
   # TODO: Validate name is being passed properly to the NIM runtime startup command
-  name: mistral-7b-instruct
+  name: mistral-7b-instruct-1xa100
   annotations:
-    nim_model_name: "trt_llm" # The name of the unpacked model
+    ngc_model_location: "ohlfw0olaadg/ea-participants/mistral-7b-instruct:MISTRAL-7b-INSTRUCT-1-A100.24.01" # Currently stored for reference
+    nim_model_name: "mistral-7b-instruct" # The name used when making API calls into the model
     autoscaling.knative.dev/target: "10" # Enable auto-scaling, set max queue size to 10 per NIM Pod
 spec:
   predictor:
-    minReplicas: 0 # Enable scale-to-zero
+    minReplicas: 1 # Set to 0 to enable scale-to-zero
     # INFO: Use the right nodeSelector for the GPU label available in your cluster, check this with 'kubectl describe nodes'
     nodeSelector:
-      # k8s.amazonaws.com/accelerator: "nvidia-tesla-t4"
+      # k8s.amazonaws.com/accelerator: "nvidia-tesla-a100"
       nvidia.com/gpu.product: A100-SXM4-80GB
     model:
       modelFormat:
