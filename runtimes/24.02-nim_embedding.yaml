@@ -25,7 +25,8 @@ spec:
       args:
         - |
           ln -s /mnt/models/* /model-store/; \
-          /app/bin/web -m /model-store -p "8080" -n "1"
+          sed -i 's/checkpoint_path: .*/checkpoint_path: "\/mnt\/pvc\/model-store\/nv-embed-qa_v4\/NV-Embed-QA-4.nemo"/g' /app/model_config_templates/NV-Embed-QA_template.yaml; \
+          /app/bin/web -c /mnt/pvc/model-store/nv-embed-qa_v4/NV-Embed-QA-4.nemo -g /app/model_config_templates/NV-Embed-QA_template.yaml -p "8080"
       # INFO: : Resources and GPU Quantity defaults should be overriden on a per-model basis
       resources: 
         requests:
