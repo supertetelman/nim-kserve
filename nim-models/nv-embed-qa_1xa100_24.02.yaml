@@ -22,7 +22,7 @@ spec:
       modelFormat:
         name: nvidia-nim-embedding 
       # INFO: Update the 'nim-pvc' value to the name of the PVC created
-      storageUri: "pvc://nim-pvc/model-store" # Files stored in a nv-embed-qa_v4 subdirectory, but NGC container does not properly format into a top-level directory
+      storageUri: "pvc://nim-pvc/model-store/" # Files stored in a nv-embed-qa_v4 subdirectory, but NGC container does not properly format into a top-level directory
       runtime: nvidia-nim-embedding-24.02
       resources:
         limits:
