@@ -1,0 +1,32 @@
+# There are 3 things in thie file that may need updating from the user, all based off the information in the NGC model tag
+# This model comes from https://registry.ngc.nvidia.com/orgs/ohlfw0olaadg/teams/ea-participants/models/llama-2-7b with latest tag 'LLAMA-2-7B-4K-FP16-1-A100.24.01'
+# Based on this tag, the model requires 1-A100 gpu and the NIM runtime version is 24.01, these values must be set below if a different model version was downloaded.
+apiVersion: serving.kserve.io/v1beta1
+kind: InferenceService
+metadata:
+  # TODO: Validate name is being passed properly to the NIM runtime startup command
+  name: mixtral-8x7b-instruct-4xa100
+  annotations:
+    ngc_model_location: "ohlfw0olaadg/ea-participants/mixtral-8x7b-instruct-v0-1:a100x4_fp16_24.02" # Currently stored for reference
+    nim_model_name: "mixtral-8x7b-instruct" # The name used when making API calls into the model
+    autoscaling.knative.dev/target: "10" # Enable auto-scaling, set max queue size to 10 per NIM Pod
+spec:
+  predictor:
+    minReplicas: 1 # Set to 0 to enable scale-to-zero
+    # INFO: Use the right nodeSelector for the GPU label available in your cluster, check this with 'kubectl describe nodes'
+    nodeSelector:
+      nvidia.com/gpu.product: A100-SXM4-80GB
+    model:
+      modelFormat:
+        name: nvidia-nim-llm 
+      # INFO: Update the 'nim-pvc' value to the name of the PVC created
+      # This path is dependant on the format of the model from NGC, it is the result of fully unpacking any tarball after downloading the NGC or HF artifact
+      # This assumes all models are downloaded into pvc://<pvc-name>/model-store/<model-specific-structure>
+      storageUri: "pvc://nim-pvc/model-store/mistral-7b-instruct_vMISTRAL-7b-INSTRUCT-1-A100.24.01/model-store/" # XXX: Note that this is named A100
+      # INFO: at authorship the latest NIM llama2-7b-chat model was built for 24.01, update this based of the tag of the model downloaded from NGC
+      runtime: nvidia-nim-llm-24.02
+      resources:
+        limits:
+          nvidia.com/gpu: 4
+        requests:
+          nvidia.com/gpu: 4

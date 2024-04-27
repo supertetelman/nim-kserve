@@ -1,0 +1,34 @@
+# There are 3 things in thie file that may need updating from the user, all based off the information in the NGC model tag
+# This model comes from https://registry.ngc.nvidia.com/orgs/ohlfw0olaadg/teams/ea-participants/models/llama-2-7b with latest tag 'LLAMA-2-7B-4K-FP16-1-A100.24.01'
+# Based on this tag, the model requires 1-A100 gpu and the NIM runtime version is 24.01, these values must be set below if a different model version was downloaded.
+apiVersion: serving.kserve.io/v1beta1
+kind: InferenceService
+metadata:
+  # TODO: Validate name is being passed properly to the NIM runtime startup command
+  name: llama2-13b-chat-2xh100
+  annotations:
+    ngc_model_location: "ohlfw0olaadg/ea-participants/llama2-13b-chat:h100x2_fp16_24.02" # Currently stored for reference
+    nim_model_name: "llama2-13b-chat" # The name used when making API calls into the model
+    autoscaling.knative.dev/target: "10" # Enable auto-scaling, set max queue size to 10 per NIM Pod
+spec:
+  predictor:
+    minReplicas: 1 # Set to 0 to enable scale-to-zero
+    # INFO: Use the right nodeSelector for the GPU label available in your cluster, check this with 'kubectl describe nodes'
+    nodeSelector:
+      # k8s.amazonaws.com/accelerator: "nvidia-tesla-a100"
+      # nvidia.com/gpu.product: NVIDIA-A100-SXM4-40GB
+      nvidia.com/gpu.product: H100-SXM4-80GB
+    model:
+      modelFormat:
+        name: nvidia-nim-llm 
+      # INFO: Update the 'nim-pvc' value to the name of the PVC created
+      # This path is dependant on the format of the model from NGC, it is the result of fully unpacking any tarball after downloading the NGC or HF artifact
+      # This assumes all models are downloaded into pvc://<pvc-name>/model-store/<model-specific-structure>
+      storageUri: "pvc://nim-pvc/model-store/llama2-13b-chat_vh100x2_fp16_24.02"
+      # INFO: at authorship the latest NIM llama2-7b-chat model was built for 24.01, update this based of the tag of the model downloaded from NGC
+      runtime: nvidia-nim-llm-24.02
+      resources:
+        limits:
+          nvidia.com/gpu: 2
+        requests:
+          nvidia.com/gpu: 2
