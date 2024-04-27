@@ -27,6 +27,8 @@ spec:
         - |
           sed -i 's/checkpoint_path: .*/checkpoint_path: "\/mnt\/models\/nv-embed-qa_v4\/NV-Embed-QA-4.nemo"/g' /app/model_config_templates/NV-Embed-QA_template.yaml; \
           /app/bin/web -c /mnt/models/nv-embed-qa_v4/NV-Embed-QA-4.nemo -g /app/model_config_templates/NV-Embed-QA_template.yaml -p "8080"
+      securityContext:
+        runAsUser: 4474987 # nemo user ID
       # INFO: : Resources and GPU Quantity defaults should be overriden on a per-model basis
       resources: 
         requests:
