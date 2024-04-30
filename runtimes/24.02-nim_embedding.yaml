@@ -1,3 +1,4 @@
+apiVersion: serving.kserve.io/v1alpha1
 kind: ClusterServingRuntime
 metadata:
   name: nvidia-nim-embedding-24.02
