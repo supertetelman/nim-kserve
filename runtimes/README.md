@@ -12,7 +12,7 @@ For example:
 
 ## Additional configurations
 
-In some more hardened deployments of Kubeflow, it may be necessary to run NIM as root for the `ln -s` commands to work effectively. In these scenarios the following lines should be added to the `kserve-container` object in the runtime:
+In some more hardened deployments of Kubeflow, it may be necessary to run NIM as root for the `ln -s` commands to work effectively. In these scenarios the following lines should be added to the `kserve-container` object in the runtime as below. It is a best practice to never run as root in production and to instead fix the model permission issues that necessitate these configuration changes.
 
 ```
       env:

@@ -3,7 +3,7 @@ metadata:
   name: nvidia-nim-embedding-24.02
 spec:
   annotations:
-    prometheus.kserve.io/port: '9090'
+    prometheus.kserve.io/port: '8002'
     prometheus.kserve.io/path: "/metrics"
   supportedModelFormats:
     - name: nvidia-nim-embedding
