@@ -4,7 +4,6 @@
 apiVersion: serving.kserve.io/v1beta1
 kind: InferenceService
 metadata:
-  # TODO: Validate name is being passed properly to the NIM runtime startup command
   name: nemotron-8b-base-1xh100
   annotations:
     ngc_model_location: "ohlfw0olaadg/ea-participants/nemotron-8b-base:h100x1_fp16_24.02" # Currently stored for reference

@@ -4,7 +4,6 @@
 apiVersion: serving.kserve.io/v1beta1
 kind: InferenceService
 metadata:
-  # TODO: Validate name is being passed properly to the NIM runtime startup command
   name: llama2-7b-chat-1xa100
   annotations:
     ngc_model_location: "ohlfw0olaadg/ea-participants/llama-2-7b:LLAMA-2-7B-4K-FP16-1-A100.24.01" # Currently stored for reference

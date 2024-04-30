@@ -4,7 +4,6 @@
 apiVersion: serving.kserve.io/v1beta1
 kind: InferenceService
 metadata:
-  # TODO: Validate name is being passed properly to the NIM runtime startup command
   name: mixtral-8x7b-instruct-4xa100
   annotations:
     ngc_model_location: "ohlfw0olaadg/ea-participants/mixtral-8x7b-instruct-v0-1:a100x4_fp16_24.02" # Currently stored for reference
