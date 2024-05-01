@@ -1,0 +1,51 @@
+apiVersion: serving.kserve.io/v1alpha1
+kind: ClusterServingRuntime
+metadata:
+  name: nvidia-nim-llm-24.02-day0 # TODO: update this naming to allow for canary upgrades
+spec:
+  annotations:
+    prometheus.kserve.io/port: '8002'
+    prometheus.kserve.io/path: "/metrics"
+  supportedModelFormats:
+    - name: nvidia-nim-llm
+      version: "24.02.day0"
+      autoSelect: true
+      priority: 1
+  protocolVersions:
+    - v2
+    - grpc-v2
+  imagePullSecrets:
+    - name: ngc-secret
+  containers:
+    - name: kserve-container
+      image: nvcr.io/ohlfw0olaadg/ea-participants/nim_llm:24.02-day0
+      ports:
+        - containerPort: 8080
+          protocol: TCP
+      command: ["/bin/sh", "-c"]
+      args:
+        - |
+          ln -s /mnt/models/* /model-store/; \
+          nim_vllm --model_name={{.Annotations.nim_model_name}} \
+            --openai_port=8080 \
+            --model_config /model_config.yaml
+      securityContext:
+        runAsUser: 4474987 # nemo user ID
+      # INFO: : Resources and GPU Quantity defaults should be overriden on a per-model basis
+      resources: 
+        requests:
+          nvidia.com/gpu: 1
+          cpu: "12"
+          memory: 128Gi
+        limits:
+          nvidia.com/gpu: 1
+          cpu: "12"
+          memory: 256Gi
+      volumeMounts:
+        - name: dshm
+          mountPath: /dev/shm
+  volumes:
+    - name: dshm
+      emptyDir:
+        medium: Memory
+        sizeLimit: "128Gi" # 128Gi is overkill, having a large max value will present bottleneck issues
