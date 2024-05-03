@@ -26,9 +26,12 @@ spec:
       args:
         - |
           ln -s /mnt/models/* /model-store/; \
+          echo 'engine:
+            model: /model-store
+            tensor_parallel_size: {{.Annotations.num_gpus}}' > /tmp/model_config.yaml; \
           nim_vllm --model_name={{.Annotations.nim_model_name}} \
             --openai_port=8080 \
-            --model_config /model_config.yaml
+            --model_config /tmp/model_config.yaml
       # INFO: : Resources and GPU Quantity defaults should be overriden on a per-model basis
       resources: 
         requests:
