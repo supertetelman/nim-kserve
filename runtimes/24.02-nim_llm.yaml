@@ -31,8 +31,6 @@ spec:
             --model={{.Annotations.nim_model_name}} \
             --openai_port=8080 \
             --health_port=8088
-      securityContext:
-        runAsUser: 4474987 # nemo user ID
       # INFO: : Resources and GPU Quantity defaults should be overriden on a per-model basis
       resources: 
         requests:

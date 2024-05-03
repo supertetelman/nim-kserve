@@ -29,8 +29,6 @@ spec:
           nim_vllm --model_name={{.Annotations.nim_model_name}} \
             --openai_port=8080 \
             --model_config /model_config.yaml
-      securityContext:
-        runAsUser: 4474987 # nemo user ID
       # INFO: : Resources and GPU Quantity defaults should be overriden on a per-model basis
       resources: 
         requests:
