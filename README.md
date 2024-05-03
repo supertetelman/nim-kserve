@@ -29,6 +29,12 @@ done
 ```
 
 5. Create a PVC called `nim-pvc` in the cluster and download the models into it.
+
+An example PVC is provided in the `scripts` directory using `local-storage`, it is recommended to use a better `StorageClass` that can share model files across nodes.
+
+```
+kubectl create -f scripts/nim-model-volume.yaml
+```
 TODO: Add details NGC download steps here, CLI setup steps, and example pv yaml files
 TODO: Add notes about managing multiple different models in the same model-store pvc
 
