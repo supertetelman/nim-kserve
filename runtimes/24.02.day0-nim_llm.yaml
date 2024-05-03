@@ -1,7 +1,7 @@
 apiVersion: serving.kserve.io/v1alpha1
 kind: ClusterServingRuntime
 metadata:
-  name: nvidia-nim-llm-24.02-day0 # TODO: update this naming to allow for canary upgrades
+  name: nvidia-nim-llm-24.02.day0 # TODO: update this naming to allow for canary upgrades
 spec:
   annotations:
     prometheus.kserve.io/port: '8002'

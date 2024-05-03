@@ -1,0 +1,26 @@
+# There are 3 things in thie file that may need updating from the user, all based off the information in the NGC model tag
+# This model comes from https://registry.ngc.nvidia.com/orgs/ohlfw0olaadg/teams/ea-participants/models/llama-2-7b with latest tag 'LLAMA-2-7B-4K-FP16-1-A100.24.01'
+# Based on this tag, the model requires 1-A100 gpu and the NIM runtime version is 24.01, these values must be set below if a different model version was downloaded.
+apiVersion: serving.kserve.io/v1beta1
+kind: InferenceService
+metadata:
+  name: nv-embed-qa-4-day0
+  annotations:
+    autoscaling.knative.dev/target: "10" # Enable auto-scaling, set max queue size to 10 per NIM Pod
+    ngc_model_location: "ohlfw0olaadg/ea-participants/nv-embed-qa:4_hf" # Currently stored for reference
+    nim_model_name: "nv-embed-qa" # The name used when making API calls into the model
+    autoscaling.knative.dev/target: "10" # Enable auto-scaling, set max queue size to 10 per NIM Pod
+spec:
+  predictor:
+    minReplicas: 1 # Enable scale-to-zero == 0
+    model:
+      modelFormat:
+        name: nvidia-nim-embedding 
+      # INFO: Update the 'nim-pvc' value to the name of the PVC created
+      storageUri: "pvc://nim-pvc/model-store/" # Files stored in a nv-embed-qa_v4_hf subdirectory, but NGC container does not properly format into a top-level directory
+      runtime: nvidia-nim-embedding-24.02.day0
+      resources:
+        limits:
+          nvidia.com/gpu: 1
+        requests:
+          nvidia.com/gpu: 1

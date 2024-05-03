@@ -4,21 +4,23 @@
 apiVersion: serving.kserve.io/v1beta1
 kind: InferenceService
 metadata:
-  name: nv-embed-qa-4-hf
+  name: llama2-7b-chat-1xgpu-day0
   annotations:
-    autoscaling.knative.dev/target: "10" # Enable auto-scaling, set max queue size to 10 per NIM Pod
-    ngc_model_location: "ohlfw0olaadg/ea-participants/nv-embed-qa:4_hf" # Currently stored for reference
-    nim_model_name: "nv-embed-qa" # The name used when making API calls into the model
+    num_gpus: "1" # The number of GPUs for this model, passed to startup script, do not change
+    ngc_model_location: "hf.co:meta-llama/Llama-2-7b-chat-hf" # Currently stored for reference
+    nim_model_name: "llama2-7b-chat" # The name used when making API calls into the model
     autoscaling.knative.dev/target: "10" # Enable auto-scaling, set max queue size to 10 per NIM Pod
 spec:
   predictor:
-    minReplicas: 1 # Enable scale-to-zero == 0
+    minReplicas: 1 # Set to 0 to enable scale-to-zero
     model:
       modelFormat:
-        name: nvidia-nim-embedding 
+        name: nvidia-nim-llm 
       # INFO: Update the 'nim-pvc' value to the name of the PVC created
-      storageUri: "pvc://nim-pvc/model-store/" # Files stored in a nv-embed-qa_v4_hf subdirectory, but NGC container does not properly format into a top-level directory
-      runtime: nvidia-nim-embedding-24.02-hf
+      # This path is dependant on the format of the model from NGC, it is the result of fully unpacking any tarball after downloading the NGC or HF artifact
+      # This assumes all models are downloaded into pvc://<pvc-name>/model-store/<model-specific-structure>
+      storageUri: "pvc://nim-pvc/model-store/Llama-2-7b-chat-hf/"
+      runtime: nvidia-nim-llm-24.02.day0
       resources:
         limits:
           nvidia.com/gpu: 1
