@@ -3,6 +3,7 @@ kind: InferenceService
 metadata:
   name: mistral-7b-instruct-1xa100
   annotations:
+    num_gpus: "1" # The number of GPUs for this model, passed to startup script, do not change
     ngc_model_location: "ohlfw0olaadg/ea-participants/mistral-7b-instruct:MISTRAL-7b-INSTRUCT-1-A100.24.01" # Currently stored for reference
     nim_model_name: "mistral-7b-instruct" # The name used when making API calls into the model
     autoscaling.knative.dev/target: "10" # Enable auto-scaling, set max queue size to 10 per NIM Pod

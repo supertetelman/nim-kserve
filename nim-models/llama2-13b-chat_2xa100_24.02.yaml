@@ -6,6 +6,7 @@ kind: InferenceService
 metadata:
   name: llama2-13b-chat-2xa100
   annotations:
+    num_gpus: "2" # The number of GPUs for this model, passed to startup script, do not change
     ngc_model_location: "ohlfw0olaadg/ea-participants/llama2-13b-chat:a100x2_fp16_24.02" # Currently stored for reference
     nim_model_name: "llama2-13b-chat" # The name used when making API calls into the model
     autoscaling.knative.dev/target: "10" # Enable auto-scaling, set max queue size to 10 per NIM Pod

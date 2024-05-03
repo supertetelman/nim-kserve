@@ -27,7 +27,7 @@ spec:
         - |
           ln -s /mnt/models/* /model-store/; \
           nemollm_inference_ms \
-            --num_gpus=1 \
+            --num_gpus={{.Annotations.num_gpus}} \
             --model={{.Annotations.nim_model_name}} \
             --openai_port=8080 \
             --health_port=8088
