@@ -18,7 +18,7 @@ spec:
     - name: ngc-secret
   containers:
     - name: kserve-container
-      image: nvcr.io/ohlfw0olaadg/ea-participants/nim_llm:24.02
+      image: nvcr.io/ohlfw0olaadg/ea-participants/nim_llm:24.02.1
       ports:
         - containerPort: 8080
           protocol: TCP
