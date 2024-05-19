@@ -15,7 +15,7 @@ spec:
     minReplicas: 1 # Set to 0 to enable scale-to-zero
     # INFO: Use the right nodeSelector for the GPU label available in your cluster, check this with 'kubectl describe nodes'
     nodeSelector:
-      nvidia.com/gpu.product: H100-SXM4-80GB
+      nvidia.com/gpu.product: NVIDIA-H100-80GB-HBM3
     model:
       modelFormat:
         name: nvidia-nim-llm 

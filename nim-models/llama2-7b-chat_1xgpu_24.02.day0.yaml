@@ -6,6 +6,7 @@ kind: InferenceService
 metadata:
   name: llama2-7b-chat-1xgpu-day0
   annotations:
+    model_dir: "Llama-2-7b-chat-hf" # Name of directory model is stored in, required for day0
     num_gpus: "1" # The number of GPUs for this model, passed to startup script, do not change
     ngc_model_location: "hf.co:meta-llama/Llama-2-7b-chat-hf" # Currently stored for reference
     nim_model_name: "llama2-7b-chat" # The name used when making API calls into the model
